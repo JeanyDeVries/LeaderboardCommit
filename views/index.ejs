@@ -1,42 +1,27 @@
 <%- include('./partials/header') %>
-    <section title="top score">
-        <ul>
-            <li>
-                <h1>
-                    Commit tournament
-                </h1>
-            </li>
-        </ul>
-        <div>
-            
-        </div>
-    </section>
+<section>   
+
+</section>
     <section title="subjects">
         <ul>
             <% subjects.forEach(subject => { %>
-
                 <li>
-    
-                    <h2><%= subject.node.name %></h2>
+                    <h2>sfdsf</h2>
                     <ul>
-                        <% var repositories = subject.node.forks.edges %>
-                        <% repositories.forEach(repository => { %>
-                            <li>
-                                <h3><%= repository.node.name %></h3>
-                            <% var references = repository.node.refs.edges %>
-                            <% references.forEach(reference => { %>
-                    
-                                <p><%= reference.node.target.history.totalCount %></p>
-                            </li>
-                            <% }) %>
-        
+                        <% subject.forEach(data => { %>
+                            
+                            <% for(var i = 0; i < 10; i++){ %>
+                                <li>
+                                    <p><%= data.user %></p>
+                                    <p><%= data.commits %></p>
+                                </li>
+                            <% } %>
                         <% }) %>
                     </ul>
-    
+                   
+        
                 </li>
-    
             <% }) %>
         </ul>
-        
     </section>
 <%- include('./partials/footer') %>

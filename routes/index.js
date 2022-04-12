@@ -51,9 +51,6 @@ module.exports = express
     }
   `).then((data) => {
       var subjects = data.organization.repositories.edges;
-      res.render('index', {
-          subjects: subjects
-      })
 
       var data = {dataSubject:[]};
       var topPerSubject = []
@@ -76,5 +73,10 @@ module.exports = express
           data.dataSubject.push(group)
           topPerSubject.push(dataTop)
       }) 
+
+      res.render('index', {
+        subjects: data.dataSubject
+      })
+
     })
   })
