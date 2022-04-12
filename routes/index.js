@@ -5,6 +5,8 @@ const graphqlAuth = graphql.defaults({
   headers: { authorization: 'token ' + process.env.key },
 })
 
+const d3 = import("d3");
+
 module.exports = express
   .Router()
 
@@ -21,7 +23,7 @@ module.exports = express
                 edges {
                   node {
                     name
-                    refs(refPrefix: "refs/heads/", first: 10) {
+                    refs(refPrefix: "refs/heads/", first: 1) {
                       edges {
                         node {
                           name
