@@ -12,53 +12,19 @@ module.exports = express
     // Get the repository information from my GitHub account
     graphqlAuth(`
     {
-        organization(login: "cmda-minor-web") 
-        {
-          repositories(last: 20, orderBy: {field: CREATED_AT, direction: ASC}) 
-          {
-            edges 
-            {
-              node 
-              {
-                forks(first: 10) 
-                {
-                  edges {
-                    node 
-                    {
-                      name
-                      refs(refPrefix: "refs/heads/", first: 100)
-                      {
-                        edges 
-                        {
-                          node 
-                          {
-                            name
-                            target 
-                            {
-                              ... on Commit 
-                              {
-                                id
-                                history(first: 0) 
-                                {
-                                  totalCount
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
+      organization(login: "cmda-minor-web") {
+        repositories(last: 20, orderBy: {field: CREATED_AT, direction: ASC}) {
+          edges {
+            node {
+              name
             }
           }
         }
       }
     }
   `).then((data) => {
-    console.log(data)
       res.render('index', {
-          dataRequest: data.organization.repositories.edges
+          subjects: data.organization.repositories.edges
       })
     })
   })
