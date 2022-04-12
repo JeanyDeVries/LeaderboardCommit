@@ -13,10 +13,32 @@ module.exports = express
     graphqlAuth(`
     {
       organization(login: "cmda-minor-web") {
-        repositories(last: 20, orderBy: {field: CREATED_AT, direction: ASC}) {
+        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first: 20) {
           edges {
             node {
               name
+              forks(first: 10) {
+                edges {
+                  node {
+                    name
+                    refs(refPrefix: "refs/heads/", first: 10) {
+                      edges {
+                        node {
+                          name
+                          target {
+                            ... on Commit {
+                              id
+                              history(first: 0) {
+                                totalCount
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -24,7 +46,7 @@ module.exports = express
     }
   `).then((data) => {
       res.render('index', {
-          subjects: data.organization.repositories.edges
+          subjects: data.organization.repositories.edges,
       })
     })
   })
