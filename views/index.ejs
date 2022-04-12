@@ -4,22 +4,17 @@
 </section>
     <section title="subjects">
         <ul>
-            <% subjects.forEach(subject => { %>
+            <% subjects.forEach(function(subject, index) { %>
                 <li>
-                    <h2>sfdsf</h2>
+                    <h2><%= names[index] %></h2>
                     <ul>
-                        <% subject.forEach(data => { %>
-                            
-                            <% for(var i = 0; i < 10; i++){ %>
-                                <li>
-                                    <p><%= data.user %></p>
-                                    <p><%= data.commits %></p>
-                                </li>
-                            <% } %>
+                        <% subject.forEach(data => { %>   
+                            <li>
+                                <p><%= data.user %></p>
+                                <p><%= data.commits %></p>
+                            </li>
                         <% }) %>
                     </ul>
-                   
-        
                 </li>
             <% }) %>
         </ul>

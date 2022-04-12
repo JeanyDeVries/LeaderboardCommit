@@ -51,13 +51,16 @@ module.exports = express
     }
   `).then((data) => {
       var subjects = data.organization.repositories.edges;
-
       var data = {dataSubject:[]};
       var topPerSubject = []
+      var subjectNames = []
+
       subjects.forEach(subject => { 
           var group = []
           var dataTop = [];
           var subjectName = subject.node.name;
+          subjectNames.push(subjectName);
+          
           var repositories = subject.node.forks.edges;
           repositories.forEach(repository => 
           { 
@@ -75,8 +78,9 @@ module.exports = express
       }) 
 
       res.render('index', {
-        subjects: data.dataSubject
+        subjects: data.dataSubject,
+        names: subjectNames
       })
-
+      console.log(data)
     })
   })
