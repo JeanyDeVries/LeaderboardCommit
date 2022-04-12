@@ -1,0 +1,23 @@
+:root{
+    --accentColor : rgb(43, 170, 243);
+    --accentDiff : rgb(82, 34, 227);
+    --white : #fff;
+    --dark : rgb(51, 51, 51);
+}
+
+*{
+    margin:0px;
+    padding:0px;
+    list-style-type: none;
+    font-family:system-UI;
+}
+
+body{
+    background-color:var(--dark)
+}
+
+main {display: flex;overflow: hidden;flex-direction: row;justify-content: center;flex-wrap: wrap;}
+
+main section {flex: 1 1 440px;height: 96vh;}
+
+main section:last-of-type {background-color: var(--white);border-radius: 20px;margin: var(--margin) var(--margin) 0 var(--margin);}
