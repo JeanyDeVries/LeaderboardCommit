@@ -33,6 +33,9 @@ module.exports = express
                               history(first: 0) {
                                 totalCount
                               }
+                              author {
+                                name
+                              }
                             }
                           }
                         }
@@ -47,8 +50,31 @@ module.exports = express
       }
     }
   `).then((data) => {
+      var subjects = data.organization.repositories.edges;
       res.render('index', {
-          subjects: data.organization.repositories.edges,
+          subjects: subjects
       })
+
+      var data = {dataSubject:[]};
+      var topPerSubject = []
+      subjects.forEach(subject => { 
+          var group = []
+          var dataTop = [];
+          var subjectName = subject.node.name;
+          var repositories = subject.node.forks.edges;
+          repositories.forEach(repository => 
+          { 
+              var references = repository.node.refs.edges
+              references.forEach(reference => 
+              {  
+                  var commitCount = reference.node.target.history.totalCount;
+                  var user = reference.node.target.author.name;
+                  group.push({subject: subjectName, user: user, commits: commitCount})
+              })
+          })
+          dataTop = group.sort((a,b)=> b.commits-a.commits)
+          data.dataSubject.push(group)
+          topPerSubject.push(dataTop)
+      }) 
     })
   })
