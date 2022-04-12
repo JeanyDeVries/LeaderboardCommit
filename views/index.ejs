@@ -7,6 +7,20 @@
 
                 <h2><%= subject.node.name %></h2>
 
+                <% var repositories = subject.node.forks.edges %>
+                <% repositories.forEach(repository => { %>
+        
+                    <p><%= repository.node.name %></p>
+
+                    <% var references = repository.node.refs.edges %>
+                    <% references.forEach(reference => { %>
+            
+                        <p><%= reference.node.target.history.totalCount %></p>
+            
+                    <% }) %>
+
+                <% }) %>
+
             </li>
 
         <% }) %>
