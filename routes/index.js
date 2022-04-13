@@ -96,6 +96,5 @@ module.exports = express
         subjects: data.dataSubject,
         names: subjectNames
       })
-      res.json(data)
     })
   })
