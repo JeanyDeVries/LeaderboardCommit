@@ -91,8 +91,9 @@ module.exports = express
           dataTop = group.sort((a,b)=> b.commits-a.commits)
           data.dataSubject.push(group)
           topPerSubject.push(dataTop)
-          totalCommitsPerSubject.push(totalCommits)
+          totalCommitsPerSubject.push({subject: subjectName, commits: totalCommits})
           let allData = JSON.stringify(topPerSubject)
+
           fs.writeFileSync('topPerSubject.json', allData)
       }) 
 
