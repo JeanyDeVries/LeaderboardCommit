@@ -21,7 +21,7 @@ module.exports = express
     resetAt
   }
       organization(login: "cmda-minor-web") {
-        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first:9) {
+        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first:8) {
           edges {
             node {
               name
@@ -60,20 +60,24 @@ module.exports = express
       var data = {dataSubject:[]};
       var topPerSubject = []
       var subjectNames = []
+      var totalCommitsPerSubject = [];
 
       subjects.forEach(subject => { 
           var group = []
           var dataTop = [];
           var subjectName = subject.node.name;
+          var totalCommits = 0;
+          var repositories = subject.node.forks.edges;
+
           subjectNames.push(subjectName);
           
-          var repositories = subject.node.forks.edges;
           repositories.forEach(repository => 
           { 
               var references = repository.node.refs.edges
               references.forEach(reference => 
               {  
                   var commitCount = reference.node.target.history.totalCount;
+                  totalCommits += commitCount;
                   var user = reference.node.target.author.name;
                   group.push({subject: subjectName, user: user, commits: commitCount})
               })
@@ -81,12 +85,13 @@ module.exports = express
           dataTop = group.sort((a,b)=> b.commits-a.commits)
           data.dataSubject.push(group)
           topPerSubject.push(dataTop)
+          totalCommitsPerSubject.push(totalCommits)
       }) 
 
       res.render('index', {
         subjects: data.dataSubject,
         names: subjectNames
       })
-      console.log(data)
+      console.log(totalCommitsPerSubject)
     })
   })
