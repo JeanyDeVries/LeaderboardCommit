@@ -5,6 +5,7 @@ const indexRoute = require('./routes/index')
 
 
 module.exports = express()
+  .use(express.json())
   .set('view engine', 'ejs')
   .set('views', './views')
 
