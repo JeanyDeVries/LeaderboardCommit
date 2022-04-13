@@ -5,19 +5,21 @@
     <section title="subjects">
         <ul>
             <% subjects.forEach(function(subject, index) { %>
-                <li>
-                    <h2><%= names[index] %></h2>
-                    <ul>
-                            <% for(let i = 0; i < 10; i++) { %>
-                                <li>
-                                    <% if(subject[i]){ %>
-                                        <p><%= subject[i].user %></p>
-                                        <p><%= subject[i].commits %></p>
-                                    <% } %>
-                                </li>
-                            <% } %>
-                    </ul>
-                </li>
+                <a href = "/detail/<%= names[index] %>">
+                    <li>
+                        <h2><%= names[index] %></h2>
+                        <ul>
+                                <% for(let i = 0; i < 10; i++) { %>
+                                    <li>
+                                        <% if(subject[i]){ %>
+                                            <p><%= subject[i].user %></p>
+                                            <p><%= subject[i].commits %></p>
+                                        <% } %>
+                                    </li>
+                                <% } %>
+                        </ul>
+                    </li>
+                </a>
             <% }) %>
         </ul>
     </section>

@@ -27,7 +27,7 @@ module.exports = express
     resetAt
   }
       organization(login: "cmda-minor-web") {
-        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first:1) {
+        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first:3) {
           edges {
             node {
               name
@@ -96,6 +96,27 @@ module.exports = express
         subjects: data.dataSubject,
         names: subjectNames
       })
-      res.json(data)
     })
   })
+
+
+  .get('/detail/:id', function (req,res){
+    var nameSubject = req.params.id;
+    graphqlAuth(`
+    {
+      organization(login: "cmda-minor-web") {
+        repository(name: "${nameSubject}") {
+          description
+          forkCount
+          stargazerCount
+          projectsUrl
+        }
+      }
+    }
+  `).then((data) => {
+      res.render('detail', {
+        
+      })
+    })
+
+  })  

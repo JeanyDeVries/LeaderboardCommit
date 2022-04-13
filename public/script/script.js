@@ -1,7 +1,11 @@
-var http = new XMLHttpRequest();
-console.log(http)
-var data = (http.responseText)
-console.log(data)
+var xhr = new XMLHttpRequest();
+
+
+xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4) {
+        console.log(data)
+    }
+  };
 
 /*
 d3.json('topPerSubject.json', (data) =>{
