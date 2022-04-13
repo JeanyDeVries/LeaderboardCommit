@@ -119,7 +119,8 @@ module.exports = express
     }
   `).then((data) => {
       res.render('detail', {
-        
+          dataRepo: data.organization.repository,
+          nameRepo: nameSubject
       })
     })
 
