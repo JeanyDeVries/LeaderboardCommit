@@ -8,11 +8,13 @@
                 <li>
                     <h2><%= names[index] %></h2>
                     <ul>
+                        <% var lastUser %>
                             <% for(let i = 0; i < 10; i++) { %>
                                 <li>
-                                    <% if(subject[i]){ %>
+                                    <% if(subject[i] && lastUser != subject[i].user){ %>
                                         <p><%= subject[i].user %></p>
                                         <p><%= subject[i].commits %></p>
+                                        <% lastUser = subject[i].user%>
                                     <% } %>
                                 </li>
                             <% } %>
