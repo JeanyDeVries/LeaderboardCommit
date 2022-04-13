@@ -8,12 +8,14 @@
                 <li>
                     <h2><%= names[index] %></h2>
                     <ul>
-                        <% subject.forEach(data => { %>   
-                            <li>
-                                <p><%= data.user %></p>
-                                <p><%= data.commits %></p>
-                            </li>
-                        <% }) %>
+                            <% for(let i = 0; i < 10; i++) { %>
+                                <li>
+                                    <% if(subject[i]){ %>
+                                        <p><%= subject[i].user %></p>
+                                        <p><%= subject[i].commits %></p>
+                                    <% } %>
+                                </li>
+                            <% } %>
                     </ul>
                 </li>
             <% }) %>

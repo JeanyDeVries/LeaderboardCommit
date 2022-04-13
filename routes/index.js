@@ -21,7 +21,7 @@ module.exports = express
     resetAt
   }
       organization(login: "cmda-minor-web") {
-        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first: 9) {
+        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first:9) {
           edges {
             node {
               name
@@ -56,7 +56,6 @@ module.exports = express
       }
     }
   `).then((data) => {
-      console.log(data)
       var subjects = data.organization.repositories.edges;
       var data = {dataSubject:[]};
       var topPerSubject = []
