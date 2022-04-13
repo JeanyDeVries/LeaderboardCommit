@@ -14,42 +14,43 @@ module.exports = express
     // Get the repository information from my GitHub account
     graphqlAuth(`
     {
-      organization(login: "cmda-minor-web") {
-        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first: 20) {
-          edges {
-            node {
-              name
-              forks(first: 10) {
-                edges {
-                  node {
-                    name
-                    refs(refPrefix: "refs/heads/", first: 1) {
-                      edges {
-                        node {
-                          name
-                          target {
-                            ... on Commit {
-                              id
-                              history(first: 0) {
-                                totalCount
-                              }
-                              author {
-                                name
+      repository(
+        owner: "cmda-minor-web"
+        name: "browser-technologies-2122"
+      ) {
+        name
+        forkCount
+        forks(
+          first: 50
+          orderBy: { field: NAME, direction: DESC }
+        ) {
+          totalCount
+          nodes {
+            name
+            refs(refPrefix: "refs/heads/", first: 1) {
+                          edges {
+                            node {
+                              name
+                              target {
+                                ... on Commit {
+                                  history(first: 0) {
+                                    totalCount
+                                  }
+                                  author {
+                                    name
+                                  }
+                                }
                               }
                             }
                           }
                         }
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       }
     }
   `).then((data) => {
+    console.log(data.repository.forks)
+    /*
       var subjects = data.organization.repositories.edges;
       var data = {dataSubject:[]};
       var topPerSubject = []
@@ -81,6 +82,8 @@ module.exports = express
         subjects: data.dataSubject,
         names: subjectNames
       })
-      console.log(data)
+      console.log(subjects)
+    */
     })
   })
+
