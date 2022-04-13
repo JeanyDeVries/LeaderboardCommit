@@ -14,12 +14,18 @@ module.exports = express
     // Get the repository information from my GitHub account
     graphqlAuth(`
     {
+      rateLimit {
+    limit
+    cost
+    remaining
+    resetAt
+  }
       organization(login: "cmda-minor-web") {
-        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first: 20) {
+        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first: 9) {
           edges {
             node {
               name
-              forks(first: 10) {
+              forks(first: 48) {
                 edges {
                   node {
                     name
@@ -50,6 +56,7 @@ module.exports = express
       }
     }
   `).then((data) => {
+      console.log(data)
       var subjects = data.organization.repositories.edges;
       var data = {dataSubject:[]};
       var topPerSubject = []
