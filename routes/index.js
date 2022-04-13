@@ -7,10 +7,16 @@ const graphqlAuth = graphql.defaults({
 
 const d3 = import("d3");
 
+const fs = require('fs');
+
 module.exports = express
   .Router()
 
-  .get('/', function (req, res) {
+  .get('/', function (req,res){
+    res.redirect('/home')
+  })
+
+  .get('/home', function (req, res) {
     // Get the repository information from my GitHub account
     graphqlAuth(`
     {
@@ -86,12 +92,35 @@ module.exports = express
           data.dataSubject.push(group)
           topPerSubject.push(dataTop)
           totalCommitsPerSubject.push(totalCommits)
+          let allData = JSON.stringify(topPerSubject)
+          fs.writeFileSync('topPerSubject.json', allData)
       }) 
 
       res.render('index', {
         subjects: data.dataSubject,
         names: subjectNames
       })
-      console.log(totalCommitsPerSubject)
     })
   })
+
+
+  .get('/detail/:id', function (req,res){
+    var nameSubject = req.params.id;
+    graphqlAuth(`
+    {
+      organization(login: "cmda-minor-web") {
+        repository(name: "${nameSubject}") {
+          description
+          forkCount
+          stargazerCount
+          projectsUrl
+        }
+      }
+    }
+  `).then((data) => {
+      res.render('detail', {
+        
+      })
+    })
+
+  })  
