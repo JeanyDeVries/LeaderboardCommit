@@ -16,6 +16,5 @@ d3.json('topPerSubject.json').then((data) => {
 // .enter()
 // .append('div')
 // .classed('bar', true);
-
 })
 

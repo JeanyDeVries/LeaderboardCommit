@@ -14,8 +14,11 @@
     padding:0px;
     list-style-type: none;
     font-family:system-UI;
+    text-decoration: none;
 }
-
+a{
+    color:var(--dark)
+}
 body{
     background-color:var(--dark)
 }
@@ -32,7 +35,7 @@ main section:last-of-type {background-color: var(--white);border-radius: 20px;ov
 
 main section:last-of-type>ul {padding: var(--padding);overflow: scroll;height: 100%;}
 
-main section[title="subjects"]>ul>li {background-color: #e7e7e7;border-radius: 10px;padding: var(--padding);margin: 0 0 var(--padding) 0;}
+main section[title="subjects"]>ul>a>li {background-color: #e7e7e7;border-radius: 10px;padding: var(--padding);margin: 0 0 var(--padding) 0;}
 
 ::-webkit-scrollbar {width: 6px;background: gray;/* height: 100%; */}
 
