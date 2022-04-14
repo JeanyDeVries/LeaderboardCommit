@@ -92,9 +92,8 @@ module.exports = express
           data.dataSubject.push(group)
           topPerSubject.push(dataTop)
           totalCommitsPerSubject.push({subject: subjectName, commits: totalCommits})
-          let allData = JSON.stringify(topPerSubject)
-
-          fs.writeFileSync('topPerSubject.json', allData)
+          let allData = JSON.stringify(totalCommitsPerSubject)
+          fs.writeFileSync('public/topPerSubject.json', allData)
       }) 
 
       res.render('index', {
@@ -104,23 +103,70 @@ module.exports = express
     })
   })
 
-
   .get('/detail/:id', function (req,res){
     var nameSubject = req.params.id;
+
     graphqlAuth(`
     {
-      organization(login: "cmda-minor-web") {
-        repository(name: "${nameSubject}") {
-          description
-          forkCount
-          stargazerCount
-          projectsUrl
+      repository(owner: "cmda-minor-web", name: "${nameSubject}") {
+        name
+        description
+        forkCount
+        stargazerCount
+        projectsUrl
+        forks(first: 50, orderBy: {field: NAME, direction: DESC}) {
+          totalCount
+          edges{
+            node {
+            name
+            refs(refPrefix: "refs/heads/", first: 1) {
+              edges {
+                node {
+                  target {
+                    ... on Commit {
+                      history(first: 0) {
+                        totalCount
+                      }
+                      author {
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
+}
+
   `).then((data) => {
+
+    var test = []
+
+    var project = data.repository.forks.edges // ends on array
+    // console.log(project)
+
+    var group = []
+    var dataTop = [];
+    
+    project.forEach(madeProject => {
+      // console.log(madeProject.node.refs)
+      var prjName = madeProject.node.name
+      console.log(prjName)
+      var test = madeProject.node.refs.edges
+      test.forEach(reference => {
+        console.log(reference.node.target) // shows history.totalcount & author.name
+        // group.push({project: madeProject})
+      });
+    });
+    
+    var person = data.repository.forks.edges[0].node.refs.edges[0].node // shows a single totalcount & name 
+    // console.log(person) 
+
       res.render('detail', {
-          dataRepo: data.organization.repository,
+          dataRepo: data.repository,
           nameRepo: nameSubject
       })
     })

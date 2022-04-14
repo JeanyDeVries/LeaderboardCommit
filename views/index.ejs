@@ -1,12 +1,16 @@
 <%- include('./partials/header') %>
-<section>   
-
+<section title="total commits">   
+    <h1>Commitcounter</h1>
+    <p>Everyone has been working hard to finish their projects for the minor. On this webpage you're able to see how many commits people have made to their repositories</p>
+    <svg width="600" height="500" preserveAspectRatio="xMinYMin meet" viewBox="0 0 500 500"></svg>
+    <ul>
+    </ul>
 </section>
     <section title="subjects">
         <ul>
             <% subjects.forEach(function(subject, index) { %>
-                <a href = "/detail/<%= names[index] %>">
                     <li>
+                        <a href = "/detail/<%= names[index] %>">
                         <h2><%= names[index] %></h2>
                         <ul>
                             <% var lastUser %>
@@ -19,7 +23,7 @@
                                         <% } %>
                                     </li>
                                 <% } %>
-                        </ul>
+                        </ul></a>
                     </li>
                 </a>
             <% }) %>
