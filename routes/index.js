@@ -6,8 +6,9 @@ const graphqlAuth = graphql.defaults({
 })
 
 const d3 = import("d3");
-
 const fs = require('fs');
+
+var dataArrayTest = []
 
 module.exports = express
   .Router()
@@ -27,7 +28,7 @@ module.exports = express
     resetAt
   }
       organization(login: "cmda-minor-web") {
-        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first:8) {
+        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first:3) {
           edges {
             node {
               name
@@ -63,10 +64,10 @@ module.exports = express
     }
   `).then((data) => {
       var subjects = data.organization.repositories.edges;
-      var data = {dataSubject:[]};
       var topPerSubject = []
       var subjectNames = []
       var totalCommitsPerSubject = [];
+      var dataArray = {dataSubject:[]};
 
       subjects.forEach(subject => { 
           var group = []
@@ -89,7 +90,7 @@ module.exports = express
               })
           })
           dataTop = group.sort((a,b)=> b.commits-a.commits)
-          data.dataSubject.push(group)
+          dataArray.dataSubject.push(group)
           topPerSubject.push(dataTop)
           totalCommitsPerSubject.push({subject: subjectName, commits: totalCommits})
           let allData = JSON.stringify(totalCommitsPerSubject)
@@ -97,9 +98,19 @@ module.exports = express
       }) 
 
       res.render('index', {
-        subjects: data.dataSubject,
+        subjects: dataArray.dataSubject,
         names: subjectNames
       })
+
+      var top10 = [];
+      dataArray.dataSubject.forEach(subject => {
+        for (let index = 0; index < 10; index++) {
+          top10.push(subject[index]);
+       }
+      });
+
+      let top10Data = JSON.stringify(top10)
+      fs.writeFileSync('public/top10Subject.json', top10Data)
     })
   })
 
@@ -108,65 +119,19 @@ module.exports = express
 
     graphqlAuth(`
     {
-      repository(owner: "cmda-minor-web", name: "${nameSubject}") {
-        name
-        description
-        forkCount
-        stargazerCount
-        projectsUrl
-        forks(first: 50, orderBy: {field: NAME, direction: DESC}) {
-          totalCount
-          edges{
-            node {
-            name
-            refs(refPrefix: "refs/heads/", first: 1) {
-              edges {
-                node {
-                  target {
-                    ... on Commit {
-                      history(first: 0) {
-                        totalCount
-                      }
-                      author {
-                        name
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+      organization(login: "cmda-minor-web") {
+        repository(name: "${nameSubject}") {
+          description
+          forkCount
+          stargazerCount
+          projectsUrl
       }
     }
 }
 
   `).then((data) => {
-
-    var test = []
-
-    var project = data.repository.forks.edges // ends on array
-    // console.log(project)
-
-    var group = []
-    var dataTop = [];
-    
-    project.forEach(madeProject => {
-      // console.log(madeProject.node.refs)
-      var prjName = madeProject.node.name
-      console.log(prjName)
-      var test = madeProject.node.refs.edges
-      test.forEach(reference => {
-        console.log(reference.node.target) // shows history.totalcount & author.name
-        // group.push({project: madeProject})
-      });
-    });
-    
-    var person = data.repository.forks.edges[0].node.refs.edges[0].node // shows a single totalcount & name 
-    // console.log(person) 
-
       res.render('detail', {
-          dataRepo: data.repository,
+          dataRepo: data.organization.repository,
           nameRepo: nameSubject
       })
     })
