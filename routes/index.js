@@ -28,7 +28,7 @@ module.exports = express
     resetAt
   }
       organization(login: "cmda-minor-web") {
-        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first:3) {
+        repositories(orderBy: {field: UPDATED_AT, direction: DESC}, first:8) {
           edges {
             node {
               name
@@ -134,12 +134,17 @@ module.exports = express
       fs.readFile("top10Subject.json", "utf-8", (err, data)=>{
         data = JSON.parse(data)
         data.forEach(element => {
+          if(!element)
+            return;
           if(element.subject == nameSubject){
-              console.log("push")
               top10.push(element);
           }
         });
+
+        let top10Data = JSON.stringify(top10)
+        fs.writeFileSync('public/detail.json', top10Data)
       })
+
 
       res.render('detail', {
           dataRepo: data.organization.repository,
