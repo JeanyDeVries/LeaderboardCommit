@@ -1,11 +1,12 @@
 <%- include('./partials/header') %>
 
-<section title="detail page">   
+<section title="detail page">
+    <a href="/../../">⬅️</a>   
     <h1><%= nameRepo %></h1>
     <p><%= dataRepo.description %></p>
-    <p><%= dataRepo.projectsUrl %></p>
-    <p><%= dataRepo.forkCount %></p>
-    <p><%= dataRepo.stargazerCount %></p>
+    <a href="<%= dataRepo.projectsUrl %>"><%= dataRepo.projectsUrl %></a>
+    <p>This repo has been forked <%= dataRepo.forkCount %> times</p>
+    <p>⭐<%= dataRepo.stargazerCount %></p>
 </section>
 <section>
     
