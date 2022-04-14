@@ -110,7 +110,7 @@ module.exports = express
       });
 
       let top10Data = JSON.stringify(top10)
-      fs.writeFileSync('public/top10Subject.json', top10Data)
+      fs.writeFileSync('top10Subject.json', top10Data)
     })
   })
 
@@ -130,6 +130,17 @@ module.exports = express
 }
 
   `).then((data) => {
+      var top10 = [];
+      fs.readFile("top10Subject.json", "utf-8", (err, data)=>{
+        data = JSON.parse(data)
+        data.forEach(element => {
+          if(element.subject == nameSubject){
+              console.log("push")
+              top10.push(element);
+          }
+        });
+      })
+
       res.render('detail', {
           dataRepo: data.organization.repository,
           nameRepo: nameSubject
