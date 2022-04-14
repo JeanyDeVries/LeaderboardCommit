@@ -8,8 +8,65 @@
     <p>This repo has been forked <%= dataRepo.forkCount %> times</p>
     <p>⭐<%= dataRepo.stargazerCount %></p>
 </section>
-<section>
-    
+<section title="details" id="yolo">
+    <h2>Top 10</h2>
 </section>
+<script>
+    var margin2 = {
+      top: 20,
+      right: 30,
+      bottom: 40,
+      left: 90
+   },
+   width2 = 460 - margin2.left - margin2.right,
+   height2 = 400 - margin2.top - margin2.bottom;
 
+const svg2 = d3.select('#yolo')
+   .append("svg")
+   .attr("width", width2 + margin2.left + margin2.right)
+   .attr("height", height2 + margin2.top + margin2.bottom)
+   .append("g")
+   .attr("transform",
+      "translate(" + margin2.left + "," + margin2.top + ")");
+// console.log(d3.json('/detail.json'))
+d3.json('/detail.json').then((data) => {
+   console.log(data)
+
+   // Add X axis
+   var x = d3.scaleLinear()
+      .domain([0, 600])
+      .range([0, width2]);
+   svg2.append("g")
+      .attr("transform", "translate(0," + height2 + ")")
+      .call(d3.axisBottom(x))
+      .selectAll("text")
+      .attr("transform", "translate(-10,0)rotate(-45)")
+      .style("text-anchor", "end");
+
+   // Y axis
+   var y = d3.scaleBand()
+      .range([0, height2])
+      .domain(data.map(function (d) {
+         return d.user;
+      }))
+      .padding(.1);
+   svg2.append("g")
+      .call(d3.axisLeft(y))
+
+   //Bars
+   svg2.selectAll("myRect")
+      .data(data)
+      .enter()
+      .append("rect")
+      .attr("x", x(0))
+      .attr("y", function (d) {
+         return y(d.user);
+      })
+      .attr("width", function (d) {
+         return x(d.commits);
+      })
+      .attr("height", y.bandwidth())
+      .attr("fill", "#69b3a2")
+})
+</script>
 <%- include('./partials/footer') %>

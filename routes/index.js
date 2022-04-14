@@ -1,8 +1,12 @@
 const express = require('express')
 
-const { graphql } = require('@octokit/graphql')
+const {
+  graphql
+} = require('@octokit/graphql')
 const graphqlAuth = graphql.defaults({
-  headers: { authorization: 'token ' + process.env.key },
+  headers: {
+    authorization: 'token ' + process.env.key
+  },
 })
 
 const d3 = import("d3");
@@ -13,7 +17,7 @@ var dataArrayTest = []
 module.exports = express
   .Router()
 
-  .get('/', function (req,res){
+  .get('/', function (req, res) {
     res.redirect('/home')
   })
 
@@ -67,35 +71,42 @@ module.exports = express
       var topPerSubject = []
       var subjectNames = []
       var totalCommitsPerSubject = [];
-      var dataArray = {dataSubject:[]};
+      var dataArray = {
+        dataSubject: []
+      };
 
-      subjects.forEach(subject => { 
-          var group = []
-          var dataTop = [];
-          var subjectName = subject.node.name;
-          var totalCommits = 0;
-          var repositories = subject.node.forks.edges;
+      subjects.forEach(subject => {
+        var group = []
+        var dataTop = [];
+        var subjectName = subject.node.name;
+        var totalCommits = 0;
+        var repositories = subject.node.forks.edges;
 
-          subjectNames.push(subjectName);
-          
-          repositories.forEach(repository => 
-          { 
-              var references = repository.node.refs.edges
-              references.forEach(reference => 
-              {  
-                  var commitCount = reference.node.target.history.totalCount;
-                  totalCommits += commitCount;
-                  var user = reference.node.target.author.name;
-                  group.push({subject: subjectName, user: user, commits: commitCount})
-              })
+        subjectNames.push(subjectName);
+
+        repositories.forEach(repository => {
+          var references = repository.node.refs.edges
+          references.forEach(reference => {
+            var commitCount = reference.node.target.history.totalCount;
+            totalCommits += commitCount;
+            var user = reference.node.target.author.name;
+            group.push({
+              subject: subjectName,
+              user: user,
+              commits: commitCount
+            })
           })
-          dataTop = group.sort((a,b)=> b.commits-a.commits)
-          dataArray.dataSubject.push(group)
-          topPerSubject.push(dataTop)
-          totalCommitsPerSubject.push({subject: subjectName, commits: totalCommits})
-          let allData = JSON.stringify(totalCommitsPerSubject)
-          fs.writeFileSync('public/topPerSubject.json', allData)
-      }) 
+        })
+        dataTop = group.sort((a, b) => b.commits - a.commits)
+        dataArray.dataSubject.push(group)
+        topPerSubject.push(dataTop)
+        totalCommitsPerSubject.push({
+          subject: subjectName,
+          commits: totalCommits
+        })
+        let allData = JSON.stringify(totalCommitsPerSubject)
+        fs.writeFileSync('public/topPerSubject.json', allData)
+      })
 
       res.render('index', {
         subjects: dataArray.dataSubject,
@@ -106,7 +117,7 @@ module.exports = express
       dataArray.dataSubject.forEach(subject => {
         for (let index = 0; index < 10; index++) {
           top10.push(subject[index]);
-       }
+        }
       });
 
       let top10Data = JSON.stringify(top10)
@@ -114,7 +125,7 @@ module.exports = express
     })
   })
 
-  .get('/detail/:id', function (req,res){
+  .get('/detail/:id', function (req, res) {
     var nameSubject = req.params.id;
 
     graphqlAuth(`
@@ -131,13 +142,13 @@ module.exports = express
 
   `).then((data) => {
       var top10 = [];
-      fs.readFile("top10Subject.json", "utf-8", (err, data)=>{
+      fs.readFile("top10Subject.json", "utf-8", (err, data) => {
         data = JSON.parse(data)
         data.forEach(element => {
-          if(!element)
+          if (!element)
             return;
-          if(element.subject == nameSubject){
-              top10.push(element);
+          if (element.subject == nameSubject) {
+            top10.push(element);
           }
         });
 
@@ -147,9 +158,9 @@ module.exports = express
 
 
       res.render('detail', {
-          dataRepo: data.organization.repository,
-          nameRepo: nameSubject
+        dataRepo: data.organization.repository,
+        nameRepo: nameSubject
       })
     })
 
-  })  
+  })
