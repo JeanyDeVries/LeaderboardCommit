@@ -102,3 +102,5 @@ dist
 
 # TernJS port file
 .tern-port
+top10Subject.json
+public/topPerSubject.json
